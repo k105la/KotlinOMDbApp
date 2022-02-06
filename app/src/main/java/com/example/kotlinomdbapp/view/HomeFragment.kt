@@ -1,22 +1,26 @@
+
 package com.example.kotlinomdbapp.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.kotlinomdbapp.util.ViewState
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinomdbapp.adapter.HomeAdapter
 import com.example.kotlinomdbapp.databinding.FragmentHomeBinding
 import com.example.kotlinomdbapp.model.MovieModel
 import com.example.kotlinomdbapp.viewmodel.HomeViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
-class HomeFragment: Fragment() {
-    private lateinit var adapter: HomeAdapter
+class HomeFragment : Fragment() {
+
     private val viewModel by lazy { HomeViewModel() }
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -24,9 +28,10 @@ class HomeFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        handleKeyboard()
         return binding.root
     }
 
@@ -52,10 +57,32 @@ class HomeFragment: Fragment() {
         binding.rvList.adapter = HomeAdapter(movies)
     }
 
-
     private fun handleError(exception: String) {
         Toast.makeText(context, exception, Toast.LENGTH_LONG).show()
-        Log.i("ERROR", "Something went wrong")
+    }
+
+    private fun handleKeyboard() = with(binding) {
+        searchMovie.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(q: String?): Boolean {
+                lifecycleScope.launch {
+                    if (viewModel.initHomeViewModel(q ?: "")) {
+                        searchMovie.setQuery("", false)
+                        searchMovie.clearFocus()
+                        Snackbar.make(root, "Success!", Snackbar.LENGTH_SHORT).show()
+                    } else {
+                        searchMovie.setQuery("", false)
+                        searchMovie.clearFocus()
+                        Snackbar.make(binding.root,
+                            "Error, invalid movie search.",
+                            Snackbar.LENGTH_LONG).show()
+                    }
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?) = false
+
+        })
     }
 
     override fun onDestroyView() {
