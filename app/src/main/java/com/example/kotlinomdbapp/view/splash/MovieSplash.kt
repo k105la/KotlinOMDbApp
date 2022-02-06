@@ -26,6 +26,6 @@ class MovieSplash : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
             val action = MovieSplashDirections.actionMovieSplashToHomeFragment()
                         findNavController().navigate(action)
-        },3000)
+        },4500)
     }
 }
