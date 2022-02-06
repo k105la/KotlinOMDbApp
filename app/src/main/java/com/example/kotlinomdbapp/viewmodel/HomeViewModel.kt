@@ -14,13 +14,21 @@ class HomeViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            val state = try {
-                val movies = RetrofitInstance.api.getMovies("Batman")
-                ViewState.Success(movies)
-            } catch (ex: Exception) {
-                ViewState.Error(ex.message ?: "Error something is wrong")
-            }
-            _movies.value = state
+            initHomeViewModel()
         }
+    }
+
+    suspend fun initHomeViewModel(s_query: String = "Batman"): Boolean {
+        var success: Boolean
+        val state = try {
+            val movies = RetrofitInstance.api.getMovies(s_query)
+            success = true
+            ViewState.Success(movies)
+        } catch (ex: Exception) {
+            success = false
+            ViewState.Error(ex.message ?: "Error something is wrong")
+        }
+        _movies.value = state
+        return success
     }
 }
