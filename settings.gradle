@@ -1,4 +1,12 @@
 pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == 'androidx.navigation.safeargs.kotlin') {
+                useModule('androidx.navigation:navigation-safe-args-gradle-plugin:2.5.0-alpha01')
+            }
+        }
+    }
+
     repositories {
         gradlePluginPortal()
         google()
