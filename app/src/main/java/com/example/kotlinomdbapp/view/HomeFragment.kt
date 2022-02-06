@@ -1,4 +1,3 @@
-
 package com.example.kotlinomdbapp.view
 
 import android.os.Bundle
@@ -29,9 +28,9 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        handleKeyboard()
+        handleSearch()
         return binding.root
     }
 
@@ -61,19 +60,22 @@ class HomeFragment : Fragment() {
         Toast.makeText(context, exception, Toast.LENGTH_LONG).show()
     }
 
-    private fun handleKeyboard() = with(binding) {
+    private fun handleSearch() = with(binding) {
         searchMovie.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(q: String?): Boolean {
                 lifecycleScope.launch {
-                    if (viewModel.initHomeViewModel(q ?: "")) {
-                        searchMovie.setQuery("", false)
-                        searchMovie.clearFocus()
-                        Snackbar.make(root, "Success!", Snackbar.LENGTH_SHORT).show()
+                    if (viewModel.checkForInvalidInput(q ?: "")) {
+                        if (viewModel.initHomeViewModel(q ?: "")) {
+                            searchMovie.setQuery("", false)
+                            searchMovie.clearFocus()
+                            Snackbar.make(root, "Success!", Snackbar.LENGTH_SHORT).show()
+                        } else {
+                            searchMovie.setQuery("", false)
+                            searchMovie.clearFocus()
+                        }
                     } else {
-                        searchMovie.setQuery("", false)
-                        searchMovie.clearFocus()
                         Snackbar.make(binding.root,
-                            "Error, invalid movie search.",
+                            "Movie not found please search again.",
                             Snackbar.LENGTH_LONG).show()
                     }
                 }
@@ -81,7 +83,6 @@ class HomeFragment : Fragment() {
             }
 
             override fun onQueryTextChange(p0: String?) = false
-
         })
     }
 
