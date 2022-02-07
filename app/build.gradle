@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -35,10 +36,11 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    // Glide for ktx
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
     // Lottie
     implementation 'com.airbnb.android:lottie:3.6.0'
-    // Picasso
-    implementation 'com.squareup.picasso:picasso:2.71828'
     // Gson
     implementation 'com.google.code.gson:gson:2.8.9'
     // Retrofit
@@ -52,7 +54,6 @@ dependencies {
     // Fragments
     def fragment_version = "1.4.1"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

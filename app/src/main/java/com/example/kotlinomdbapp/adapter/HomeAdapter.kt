@@ -3,14 +3,15 @@ package com.example.kotlinomdbapp.adapter
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.kotlinomdbapp.R
 import com.example.kotlinomdbapp.databinding.MovieCardBinding
 import com.example.kotlinomdbapp.model.MovieModel
-import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
 
 class HomeAdapter(private val searchData: MovieModel) :
     RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
@@ -21,10 +22,11 @@ class HomeAdapter(private val searchData: MovieModel) :
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
+        holder.bindPoster(searchData.Search[position].Poster)
         holder.bindTitle(searchData.Search[position].Title)
         holder.bindDate(searchData.Search[position].Year)
-        holder.bindPoster(searchData.Search[position].Poster)
         holder.bindUrl(searchData.Search[position].imdbID)
+        Log.i("HomeAdapter", searchData.Search[position].Poster)
     }
     /**
      * Provide a reference to the type of views that you are using
@@ -42,7 +44,7 @@ class HomeAdapter(private val searchData: MovieModel) :
         }
 
         fun bindPoster(poster_url: String) = with(binding) {
-            Picasso.get().load(poster_url).into(posterImage)
+            Glide.with(root).load(poster_url).placeholder(R.drawable.ic_no_poster).into(posterImage)
         }
 
         fun bindUrl(imdb_id: String) = with(binding) {
