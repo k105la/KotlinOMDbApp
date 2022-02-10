@@ -22,4 +22,3 @@ interface MovieApi {
         const val BASE_URL = "https://www.omdbapi.com/"
     }
 }
-//b840d385
