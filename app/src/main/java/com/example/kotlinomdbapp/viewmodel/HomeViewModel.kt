@@ -1,9 +1,12 @@
 package com.example.kotlinomdbapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kotlinomdbapp.service.MovieRepo
+import com.example.kotlinomdbapp.service.MovieRepo.checkForInvalidInput
 import com.example.kotlinomdbapp.service.RetrofitInstance
 import com.example.kotlinomdbapp.util.ViewState
 import kotlinx.coroutines.launch
@@ -26,7 +29,7 @@ class HomeViewModel : ViewModel() {
         // State variable which holds final state
         val state = try {
             // API call to get MoviesModel
-            val movies = RetrofitInstance.api.getMovies(s_query)
+            val movies = MovieRepo.getMovies(s_query)
             // Success state
             ViewState.Success(movies)
         } catch (ex: Exception) {
@@ -34,12 +37,5 @@ class HomeViewModel : ViewModel() {
             ViewState.Error(ex.message ?: "Error something is wrong")
         }
         _movies.value = state // Save state to movies variable
-    }
-
-    suspend fun checkForInvalidInput(s_query: String): Boolean {
-        // API call to get Response status
-        val status = RetrofitInstance.api.getStatus(s_query).await()
-        // Returns current response status
-        return status.Response.toBoolean()
     }
 }

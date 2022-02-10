@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinomdbapp.adapter.HomeAdapter
 import com.example.kotlinomdbapp.databinding.FragmentHomeBinding
 import com.example.kotlinomdbapp.model.MovieModel
+import com.example.kotlinomdbapp.service.MovieRepo
 import com.example.kotlinomdbapp.viewmodel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -65,7 +66,7 @@ class HomeFragment : Fragment() {
         searchMovie.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(q: String?): Boolean {
                 lifecycleScope.launch {
-                    if (viewModel.checkForInvalidInput(q ?: "")) {
+                    if (MovieRepo.checkForInvalidInput(q ?: "").body()?.Response.toBoolean()) {
                         viewModel.initHomeViewModel(q ?: "")
                         searchMovie.setQuery("", false)
                         searchMovie.clearFocus()

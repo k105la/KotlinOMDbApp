@@ -26,7 +26,6 @@ class HomeAdapter(private val searchData: MovieModel) :
         holder.bindTitle(searchData.Search[position].Title)
         holder.bindDate(searchData.Search[position].Year)
         holder.bindUrl(searchData.Search[position].imdbID)
-        Log.i("HomeAdapter", searchData.Search[position].Poster)
     }
     /**
      * Provide a reference to the type of views that you are using

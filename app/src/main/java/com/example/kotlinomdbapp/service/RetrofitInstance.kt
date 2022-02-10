@@ -4,12 +4,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 // The Retrofit object generates an implementation of the MovieApi interface
-object RetrofitInstance {
-    val api: MovieApi by lazy {
-        Retrofit.Builder()
+class RetrofitInstance {
+    private val rf = Retrofit.Builder()
             .baseUrl(MovieApi.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(MovieApi::class.java)
-    }
+
+    val movieService: MovieApi by lazy { rf.create(MovieApi::class.java) }
 }
+
+

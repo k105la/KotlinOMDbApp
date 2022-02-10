@@ -15,10 +15,11 @@ interface MovieApi {
                           @Query("apikey") apikey: String = "b840d385",
                           @Query("type") type : String = "movie" ): Response<MovieModel>
     @GET("/")
-    fun getStatus(@Query("s") s : String,
+    suspend fun getStatus(@Query("s") s : String,
                           @Query("apikey") apikey: String = "b840d385",
-                          @Query("type") type : String = "movie" ): Call<MovieModel>
+                          @Query("type") type : String = "movie" ): Response<MovieModel>
     companion object {
         const val BASE_URL = "https://www.omdbapi.com/"
     }
 }
+//b840d385
